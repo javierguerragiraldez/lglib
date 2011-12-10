@@ -1,7 +1,6 @@
 local string, table = string, table
 local tinsert, tremove, concat, tsort = table.insert, table.remove, table.concat, table.sort
 
-module(..., package.seeall)
 
 -- this is a LIST prototype, and all of list instances inherit it
 local List = {}
@@ -38,7 +37,7 @@ setmetatable(List, {
 
 
 -- the normalization of indice
-function normalize_slice( self, start, stop )
+local function normalize_slice( self, start, stop )
 	local start = start or 1
 	local stop = stop or #self
 	
