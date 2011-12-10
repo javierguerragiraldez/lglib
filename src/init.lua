@@ -86,12 +86,10 @@ _G['checkType'] = function (...)
 	local half = args_len / 2;
 	for i=1, half do
 		if 'string' ~= type(args[i+half]) then
-			print(debug.traceback())
 			error('[Error] The lower half part of the argumet list should be string!', 2)
 		end
 		
 		if args[i+half] ~= type(args[i]) then  -- args[i+half] ~= typename(args[i])
-			print(debug.traceback())
 			error(("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
 		end
 	end
