@@ -1,5 +1,3 @@
--- after loading lglib.strict, all global variables should be declared before use
-require 'lglib.strict'
 
 module(..., package.seeall)
 local modname = ...
