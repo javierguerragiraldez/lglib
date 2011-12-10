@@ -2,6 +2,7 @@
 module(..., package.seeall)
 local modname = ...
 
+
 -- register extended methods into lua standard library, like string, table, io, etc 
 -- DO NOT UNDERSTAND the code of implementation
 function import(wrap_table, sub_modname)
@@ -97,6 +98,11 @@ _G['checkType'] = function (...)
 	return true
 end
 
+_G['types'] = function (a,b,...)
+	if a==nil and b==nil then return true end
+	if type(a) ~= b then return false end
+	return types(...)
+end
 
 ---
 -- checkRange(a, 0, 10, b, 20, 30, c, 10, 100)

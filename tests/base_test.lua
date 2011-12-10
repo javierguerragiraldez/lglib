@@ -22,6 +22,24 @@ context('lglib', function ()
 			assert_true (checkType (true, 1, 'a', {2},
 					'boolean', 'number', 'string', 'table'))
 			assert_error (function() checkType (1, 'string') end)
+			assert_error (function() checkType (1, 2) end)
+		end))
+
+		test ('types', strict.wrap(function ()
+			assert_true (types (1,'number'))
+			assert_false(types (1, 'string'))
+			assert_true (types (
+				1, 'number',
+				'a', 'string',
+				true, 'boolean',
+				nil, 'nil',
+				{1}, 'table'))
+			assert_false (types (
+				1, 'number',
+				'a', 'string',
+				true, 'boolean',
+				false, 'nil',
+				{1}, 'table'))
 		end))
 
 	end)
