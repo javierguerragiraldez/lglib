@@ -18,6 +18,12 @@ context('lglib', function ()
 			assert_false (isSet(List))
 		end))
 
+		test ('checkType', strict.wrap(function ()
+			assert_true (checkType (true, 1, 'a', {2},
+					'boolean', 'number', 'string', 'table'))
+			assert_error (function() checkType (1, 'string') end)
+		end))
+
 	end)
 
 end)
