@@ -8,13 +8,34 @@
 
 local getinfo, error, rawset, rawget = debug.getinfo, error, rawset, rawget
 
-local mt = getmetatable(_G)
-if mt == nil then
-  mt = {}
-  setmetatable(_G, mt)
+local mt = getmetatable(_G) or {}
+mt.__declared = {}
+
+local M = {}
+function M.on()
+	setmetatable (_G, mt)
+end
+function M.off()
+	setmetatable (_G, nil)
 end
 
-mt.__declared = {}
+local function _post(p,...)
+	p()
+	return ...
+end
+
+function M.call(f,...)
+	M.on()
+	return _post(M.off, f(...))
+end
+
+function M.wrap(f)
+	return function ()
+		M.on()
+		f()
+		M.off()
+	end
+end
 
 local function what ()
   local d = getinfo(3, "S")
@@ -40,3 +61,5 @@ mt.__index = function (t, n)
   return rawget(t, n)
 end
 
+M.on()
+return M
