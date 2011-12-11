@@ -100,7 +100,9 @@ end
 
 _G['types'] = function (a,b,...)
 	if a==nil and b==nil then return true end
-	if type(a) ~= b then return false end
+	if type(a) ~= b then
+		return false, ("%s is not a %s"):format(tostring(a), tostring(b))
+	end
 	return types(...)
 end
 
@@ -148,15 +150,20 @@ end
 
 -- config a prototype for a given object/instance
 _G['setProto'] = function (obj, proto)
-	checkType(obj, proto, 'table', 'table')
+	assert (types(obj, 'table', proto, 'table'))
 	
 	local mt = getmetatable(obj) or {}
 	local old_meta = mt.__index
-	
-	-- methods binding when old_meta is nil or table
-	if not old_meta or type(old_meta) == 'table' then
-		mt.__index = function(t, k)  --- why should we introduce a parameter t here??? it seems we don't use it at all.
-			return (old_meta and old_meta[k]) or proto[k] 
+
+	if nil == old_meta then
+		mt.__index = proto
+	elseif type(old_meta) == 'table' then
+		mt.__index = function (t, k)
+			return old_meta[k] or proto[k]
+		end
+	elseif type(old_meta) == 'function' then
+		mt.__index = function (t, k)
+			return old_meta(t,k) or proto[k]
 		end
 	end
 	
