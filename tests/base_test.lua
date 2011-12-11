@@ -50,7 +50,7 @@ context('lglib', function ()
 			assert_true  (ranges(5,2,6, 4,2,5))
 			assert_false (ranges(5,2,6, 3,4,5))
 			assert_false (ranges(5,2,6, 4,2,3))
-			
+
 			assert_true  (ranges(5,2,6, 4,2,5))
 			assert_false (ranges(4,5,6, 4,2,5))
 			assert_false (ranges(5,2,4, 4,2,5))
@@ -70,6 +70,16 @@ context('lglib', function ()
 			assert_equal (5, obj.a)
 			assert_equal (10, obj.b)
 			assert_equal (15, obj.c)
+		end))
+
+		test ('T', strict.wrap(function ()
+			local t = T()
+			assert_true (types(t,'table'))
+			assert_equal (table.insert, t.insert)
+
+			local t2 = {}
+			local t3 = T(t2)
+			assert_equal (t2, t3)
 		end))
 
 	end)

@@ -3,12 +3,12 @@ module(..., package.seeall)
 local modname = ...
 
 
--- register extended methods into lua standard library, like string, table, io, etc 
+-- register extended methods into lua standard library, like string, table, io, etc
 -- DO NOT UNDERSTAND the code of implementation
 function import(wrap_table, sub_modname)
 	local info = debug.getinfo(1, 'S')
 	local filedir = info.source:sub(2, -10)
-	
+
 	setfenv(assert(loadfile( ('%s/%s.lua'):format(filedir, sub_modname))), setmetatable(wrap_table, {__index=_G}))(filedir)
 	setmetatable(wrap_table, nil)
 end
@@ -32,14 +32,14 @@ _G['typename'] = function (t)
 	checkType(t, 'table')
 	if t.__typename then
 		return t.__typename
-	else 
+	else
 		return nil
 	end
 end
 
 -- checking the type of instance
 local istabletype = function (t, name)
-	local ret = typename(t) 
+	local ret = typename(t)
 	if ret and ret == name then
 		return true
 	else
@@ -70,7 +70,7 @@ _G['ptable'] = function (t)
     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 end
 
--- print all layers of table information 
+-- print all layers of table information
 _G['fptable'] = function (t)
 	if type(t) ~= 'table' then return print(("[Error] parameter '%s' passed in is not a table "):format(tostring(t))) end
     print(table.tree(t))
@@ -83,13 +83,13 @@ _G['checkType'] = function (...)
 	local args_len = select('#', ...)
 	local args = {...}
 	assert(args_len % 2 == 0, 'Argument types and objs are not matched.')
-	
+
 	local half = args_len / 2;
 	for i=1, half do
 		if 'string' ~= type(args[i+half]) then
 			error('[Error] The lower half part of the argumet list should be string!', 2)
 		end
-		
+
 		if args[i+half] ~= type(args[i]) then  -- args[i+half] ~= typename(args[i])
 			error(("[Error] This %snd argument: %s doesn't match given type: %s"):format(i, tostring(args[i]), args[i+half]), 2)
 		end
@@ -113,13 +113,13 @@ _G['checkRange'] = function (...)
 	local args_len = select('#', ...)
 	local args = {...}
 	assert(args_len % 3 == 0, 'Argument types and objs are not matched.')
-	
+
 	local par = args_len / 3;
 	for i=1, par do
 		local t = (i-1)*3
 		assert('number' == type(args[t+2]), ('This argument: [%s]=%s should be number!'):format(t+2, args[t+2]))
 		assert('number' == type(args[t+3]), ('This argument: [%s]=%s should be number!'):format(t+3, args[t+3]))
-		assert( args[t+1] >= args[t+2] and args[t+1] <= args[t+3], 
+		assert( args[t+1] >= args[t+2] and args[t+1] <= args[t+3],
 			("This argument: %s is not between %s and %s!"):format(t+1, t+2, t+3))
 	end
 
@@ -144,14 +144,14 @@ _G['isFalse'] = function (onearg)
 	if type(onearg) == 'table' and table.isEmpty(onearg) then
 		return true
 	end
-	
+
 	return false
 end
 
 -- config a prototype for a given object/instance
 _G['setProto'] = function (obj, proto)
 	assert (types(obj, 'table', proto, 'table'))
-	
+
 	local mt = getmetatable(obj) or {}
 	local old_meta = mt.__index
 
@@ -166,25 +166,24 @@ _G['setProto'] = function (obj, proto)
 			return old_meta(t,k) or proto[k]
 		end
 	end
-	
+
 	return setmetatable(obj, mt)
 end
 
 -- setting lua-table as a prototype for any instance
 _G['T'] = function (t)
-	local t = t or {}
-	return setProto(t, table)
+	return setProto(t or {}, table)
 end
 
 -- printf as an alias of string.format()
-_G['printf'] = function (...) 
-	print(string.format(...)) 
+_G['printf'] = function (...)
+	print(string.format(...))
 end
 
 ------------------------------------------------------------------------
 -- serialize lua instances/objects into a lua-table format
 -- @param self  object to be serialized
--- @param seen  holding tables that have been serialized 
+-- @param seen  holding tables that have been serialized
 -- @return string|nil  if works. string returned. otherwise for nil
 ------------------------------------------------------------------------
 _G['serialize'] = function (self, seen)
@@ -228,27 +227,27 @@ end
 ------------------------------------------------------------------------
 -- deserialization is just loading serialized string into memory
 -- the point is that format of serialzation are just lua code of assignment of lua-tables
--- @param self  serialized string 
+-- @param self  serialized string
 -- @return lua tables/instance
 ------------------------------------------------------------------------
 _G['deserialize'] = function (self)
 	if not self then
 		return nil
 	end
-	
+
 	-- just loading them into memory
 	local func = loadstring(("return %s"):format(self))
 	if not func then
 		error(("[Error] deserialize fails %s %s"):format(debug.traceback(), self))
 	end
-	
+
 	-- running the string as lua-code
 	return func()
 end
 
 
 ------------------------------------------------------------------------
--- Injection of several methods into standard library 
+-- Injection of several methods into standard library
 ------------------------------------------------------------------------
 function loadStringModule()
 	import(string, 'string')
@@ -274,7 +273,7 @@ end
 lglib_init()
 
 
--- DO NOT UNDERSTAND 
+-- DO NOT UNDERSTAND
 -- for debug issue
 local function getname(func_info)
 	local n = func_info
@@ -284,8 +283,8 @@ local function getname(func_info)
 		return string.format("%s (%s)", lc, n.name)
 	else
 		return lc
-	end 
-end 
+	end
+end
 
 local function trace_intof(event)
 	local stable = debug.getinfo(2, 'Sn')
@@ -305,7 +304,7 @@ local function trace_leavef(event)
 	end
 end
 
-local isdebug = os.getenv('DEBUG') 
+local isdebug = os.getenv('DEBUG')
 if isdebug then
 	debug.sethook(trace_intof, 'c')
 --	debug.sethook(trace_leavef, 'r')
