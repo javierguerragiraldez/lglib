@@ -124,6 +124,14 @@ _G['checkRange'] = function (...)
 	return true
 end
 
+_G['ranges'] = function (a, b, c, ...)
+	if a==nil and b==nil and c==nil then return true end
+	if not (a >= b and a <= c) then
+		return false, ("%s is not between %s and %s!"):format(a, b, c)
+	end
+	return ranges(...)
+end
+
 -- use for what?
 -- nil, false, 0, "", {}, etc
 _G['isFalse'] = function (onearg)

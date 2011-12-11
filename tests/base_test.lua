@@ -42,6 +42,20 @@ context('lglib', function ()
 				{1}, 'table'))
 		end))
 
+		test ('ranges', strict.wrap(function ()
+			assert_true  (ranges(5,2,6))
+			assert_false (ranges(4,5,6))
+			assert_false (ranges(5,2,4))
+
+			assert_true  (ranges(5,2,6, 4,2,5))
+			assert_false (ranges(5,2,6, 3,4,5))
+			assert_false (ranges(5,2,6, 4,2,3))
+			
+			assert_true  (ranges(5,2,6, 4,2,5))
+			assert_false (ranges(4,5,6, 4,2,5))
+			assert_false (ranges(5,2,4, 4,2,5))
+		end))
+
 	end)
 
 end)
