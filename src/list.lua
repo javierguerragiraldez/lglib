@@ -114,7 +114,7 @@ end
 
 -- appending extra element at the tail of list
 function List:append(val)
-    tinsert(self, val)
+	self[#self+1] = val
     return self
 end
 

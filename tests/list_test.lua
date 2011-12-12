@@ -53,5 +53,11 @@ context ('list', function ()
 			'{{"a","x"},{"b","y"}}',
 			serialize(List.zip({'a','b','c'},{'x','y'})))
 	end))
+
+	test ('append', strict.wrap(function ()
+		assert_true (List{1,2,3}:append(4):equal{1,2,3,4})
+		assert_true (List{1,2,3}:append('x'):equal{1,2,3,'x'})
+		assert_true (List{1,2,3}:append(nil):equal{1,2,3})
+	end))
 	
 end)
