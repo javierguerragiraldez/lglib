@@ -73,4 +73,7 @@ context ('list', function ()
 		assert_error (function () List{1,2,3}:extend(nil) end)
 	end))
 	
+	test ('iremove', strict.wrap(function ()
+		assert_true (List{1,2,3}:iremove(1):equal{2,3,4})
+	end))
 end)
