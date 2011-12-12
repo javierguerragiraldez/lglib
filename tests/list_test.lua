@@ -44,5 +44,14 @@ context ('list', function ()
 		assert_equal ('{{"a","x"},{"b","y"}}', serialize(t))
 		assert_equal ('{1,2}', serialize(t2))
 	end))
+
+	test ('zip', strict.wrap(function ()
+		assert_equal (
+			'{{"a","x"},{"b","y"},{"c","z"}}',
+			serialize(List.zip({'a','b','c'},{'x','y','z'})))
+		assert_equal (
+			'{{"a","x"},{"b","y"}}',
+			serialize(List.zip({'a','b','c'},{'x','y'})))
+	end))
 	
 end)
