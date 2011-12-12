@@ -15,10 +15,10 @@ local function new (tbl)
 	local t = {}
 	
 	if tbl then
-		checkType(tbl, 'table')
+		assert(types(tbl, 'table'))
 		--only List part are passed into/// call takeAparts() directly
-		for _, v in ipairs(tbl) do
-			tinsert(t, v)
+		for i, v in ipairs(tbl) do
+			t[i] = v
 		end
 	end
 	
