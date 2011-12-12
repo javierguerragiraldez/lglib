@@ -75,10 +75,12 @@ function List.range(start, finish)
 		finish = start
 		start = 1
 	end
-	checkType(start, finish, 'number', 'number')
+	assert (types(start,'number', finish, 'number'))
 	
 	local  t = new()
-	for i = start, finish do tinsert(t, i) end
+	for i = start, finish do
+		t[#t+1] = i
+	end
 	return t
 end
 
