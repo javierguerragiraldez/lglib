@@ -85,22 +85,22 @@ function List.range(start, finish)
 end
 
 
--- CAN NOT UNDERSTAND mapn and zip class methods
--- 将函数作用到多个List上
--- 每个list的元素个数都必须相同
-function List.mapn(fn,...)
-    --fun = function_arg(1,fun)
-    local res = List()
-    local lists = {...}
-    
-	for i = 1, #lists do
-        local args = {}
-        for j = 1, #lists do
-            args[#args+1] = lists[j][i]
-        end
-        res[#res+1] = fun(unpack(args))
-    end
-    return res
+function List.mapn (fn, ...)
+	local res = List()
+	local lists = {...}
+	local nl = #lists
+	if nl==0 then return res end
+	
+	local args = {}
+	for i = 1, #(lists[1]) do
+		for j = 1, nl do
+			local a = lists[j][i]
+			if nil == a then return res end
+			args[j] = a
+		end
+		res[#res+1] = fn(unpack(args))
+	end
+	return res
 end
 
 
