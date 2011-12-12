@@ -59,5 +59,18 @@ context ('list', function ()
 		assert_true (List{1,2,3}:append('x'):equal{1,2,3,'x'})
 		assert_true (List{1,2,3}:append(nil):equal{1,2,3})
 	end))
+
+	test ('prepend', strict.wrap(function ()
+		assert_true (List{1,2,3}:prepend(4):equal{4,1,2,3})
+		assert_true (List{1,2,3}:prepend('x'):equal{'x',1,2,3})
+		assert_true (List{1,2,3}:prepend(nil):equal{nil,1,2,3})
+	end))
+
+	test ('extend', strict.wrap(function ()
+		assert_true (List{1,2,3}:extend{}:equal{1,2,3})
+		assert_true (List{1,2,3}:extend{4}:equal{1,2,3,4})
+		assert_true (List{1,2,3}:extend{4,5,6}:equal{1,2,3,4,5,6})
+		assert_error (function () List{1,2,3}:extend(nil) end)
+	end))
 	
 end)

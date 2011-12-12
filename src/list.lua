@@ -127,8 +127,11 @@ end
 
 --list expansion by another one
 function List:extend( another )
-	checkType(another, 'table') -- checkType(another, 'List')
-	for i = 1, #another do tinsert(self, another[i]) end
+	assert (types (another, 'table'))
+	local l = #self
+	for i = 1, #another do
+		self [i+l] = another[i]
+	end
 	return self
 end
 
