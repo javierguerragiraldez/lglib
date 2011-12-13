@@ -87,7 +87,33 @@ context ('list', function ()
 		assert_true (List{'a','b','c'}:remove('c'):equal{'a','b'    })
 		assert_true (List{'a','b','c'}:remove('d'):equal{'a','b','c'})
 		assert_true (List{'a','b','a','c'}:remove('a'):equal{'b','c'})
-
 		assert_true (List{'a','b','b','c'}:remove('b'):equal{'a','c'})
+	end))
+
+	test ('pop', strict.wrap(function ()
+		local l = List{'a','b','c'}
+		assert_equal ('c', l:pop())
+		assert_true (l:equal{'a','b'})
+
+		assert_equal ('b', l:pop())
+		assert_true (l:equal{'a'})
+
+		assert_equal ('a', l:pop())
+		assert_true (l:equal{})
+
+		assert_equal (nil, l:pop())
+		assert_true (l:equal{})
+	end))
+
+	test ('find', strict.wrap(function ()
+		assert_equal (3, List{'a','b','c','d'}:find('c'))
+		assert_equal (2, List{'a','b','c','b'}:find('b'))
+		assert_equal (nil, List{'a','b','c','b'}:find('d'))
+		assert_equal (nil, List{}:find('a'))
+	end))
+
+	test ('reverse', strict.wrap(function ()
+		assert_true (List{'a','b','c','d'}:reverse():equal{'d','c','b','a'})
+		assert_true (List{'a','b','c'}:reverse():equal{'c','b','a'})
 	end))
 end)
