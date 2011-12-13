@@ -150,6 +150,7 @@ function List:remove(x)
 		while self[i] == x do
 			tremove(self,i)
 		end
+		if nil == self[i] then break end
 	end
 	return self
 end
