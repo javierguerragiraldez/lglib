@@ -72,5 +72,22 @@ context ('list', function ()
 		assert_true (List{1,2,3}:extend{4,5,6}:equal{1,2,3,4,5,6})
 		assert_error (function () List{1,2,3}:extend(nil) end)
 	end))
-	
+
+	test ('iremove', strict.wrap(function ()
+		assert_true (List{'a','b','c'}:iremove(0):equal{'a','b','c'})
+		assert_true (List{'a','b','c'}:iremove(1):equal{    'b','c'})
+		assert_true (List{'a','b','c'}:iremove(2):equal{'a',    'c'})
+		assert_true (List{'a','b','c'}:iremove(3):equal{'a','b'    })
+		assert_true (List{'a','b','c'}:iremove(4):equal{'a','b','c'})
+	end))
+
+	test ('remove', strict.wrap(function ()
+		assert_true (List{'a','b','c'}:remove('a'):equal{    'b','c'})
+		assert_true (List{'a','b','c'}:remove('b'):equal{'a',    'c'})
+		assert_true (List{'a','b','c'}:remove('c'):equal{'a','b'    })
+		assert_true (List{'a','b','c'}:remove('d'):equal{'a','b','c'})
+		assert_true (List{'a','b','a','c'}:remove('a'):equal{'b','c'})
+
+		assert_true (List{'a','b','b','c'}:remove('b'):equal{'a','c'})
+	end))
 end)

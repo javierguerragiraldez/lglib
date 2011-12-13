@@ -13,7 +13,7 @@ List.__typename = "List"
 local function new (tbl)
 	-- if tbl is nil, then empty table returned
 	local t = {}
-	
+
 	if tbl then
 		assert(types(tbl, 'table'))
 		--only List part are passed into/// call takeAparts() directly
@@ -21,7 +21,7 @@ local function new (tbl)
 			t[i] = v
 		end
 	end
-	
+
 	-- setting the inheritance relationship
 	return setmetatable(t, List)
 end
@@ -40,14 +40,14 @@ setmetatable(List, {
 local function normalize_slice( self, start, stop )
 	local start = start or 1
 	local stop = stop or #self
-	
+
 	if (stop > 0 and start > 0) or (stop < 0 and start < 0) then assert( stop >= start) end
 	if start > #self then return nil, nil end
-	
+
 	-- the negative index
 	-- -1 is the last elment, -2 the penultimate, and so on
-	if start == 0 then 
-		start = 1 
+	if start == 0 then
+		start = 1
 	elseif start < 0 then
 		if math.abs(start) >= #self then
 			start = 1
@@ -55,13 +55,13 @@ local function normalize_slice( self, start, stop )
 			start = #self + start + 1
 		end
 	end
-	if stop == 0 then 
-		stop = 1 
-	elseif stop < 0 then 
-		stop = #self + stop + 1 
+	if stop == 0 then
+		stop = 1
+	elseif stop < 0 then
+		stop = #self + stop + 1
 		if stop < 1 then return nil, nil end
 	end
-	
+
 	return start, stop
 end
 
@@ -69,14 +69,14 @@ end
 ------------------------------------------------------------------------
 -- @class method
 -- start para is optional, and the default value is 1
--- generate a sequence of integers 
+-- generate a sequence of integers
 function List.range(start, finish)
 	if not finish then
 		finish = start
 		start = 1
 	end
 	assert (types(start,'number', finish, 'number'))
-	
+
 	local  t = new()
 	for i = start, finish do
 		t[#t+1] = i
@@ -90,7 +90,7 @@ function List.mapn (fn, ...)
 	local lists = {...}
 	local nl = #lists
 	if nl==0 then return res end
-	
+
 	local args = {}
 	for i = 1, #(lists[1]) do
 		for j = 1, nl do
@@ -137,7 +137,7 @@ end
 
 -- delete by index
 function List:iremove (i)
-    checkType(i, 'number')
+	assert (types (i, 'number'))
     tremove(self, i)
     return self
 end
@@ -146,10 +146,12 @@ end
 -- maybe a better API is List:remove(x, numOfDeletion)
 -- if numOfDeletion is negative integer,then counting from the last one in reversing order.
 function List:remove(x)
-    for i=1, #self do
-        if self[i] == x then tremove(self,i) end
-    end
-    return self
+	for i=1, #self do
+		while self[i] == x do
+			tremove(self,i)
+		end
+	end
+	return self
 end
 
 -- push a new element into list at right-hand side
@@ -160,7 +162,7 @@ function List:pop()
     return tremove(self)
 end
 
--- starting from idx index and trying to find the first element with value=val, 
+-- starting from idx index and trying to find the first element with value=val,
 function List:find(val, idx)
     checkType(self, 'table')
     local idx = idx or 1
@@ -216,7 +218,7 @@ function List:slice(start, stop, is_rev)
 	local nt = List()
 	local start, stop = normalize_slice(self, start, stop)
 	if not start or not stop then return List() end
-	
+
 	if is_rev ~= 'rev' then
 		for i = start, (#self > stop and stop or #self) do
 			table.insert(nt, self[i])
@@ -226,7 +228,7 @@ function List:slice(start, stop, is_rev)
 			table.insert(nt, self[i])
 		end
 	end
-	
+
 	return nt
 end
 
@@ -241,7 +243,7 @@ function List:len()
 	return #self
 end
 
--- deleted by indexing interval 
+-- deleted by indexing interval
 function List:chop(i1,i2)
 	local i1, i2 = normalize_slice(i1, i2)
     for i = i1, i2 do
@@ -266,23 +268,23 @@ function List:sliceAssign(i1, i2, seq)
     checkType(i1, i2, 'number', 'number')
     local i1, i2 = normalize_slice(self, i1, i2)
 	local delta = i2 - i1 + 1
-	
+
 	-- old implementation
 	if i2 >= i1 then self:chop(i1, i2) end
     self:splice(i1, seq)
-    
+
     -- new implementation
     for i = 1, delta do
     	self[i1 + i - 1] = seq[i]
     end
-    
+
     return self
 end
 
 -- + can be used as linking/expanding sign, like lnew = l1 + l2
 function List:__add(another)
     checkType(another, 'table')
-    
+
 	local ls = List(self)
     ls:extend(another)
     return ls
@@ -311,25 +313,25 @@ function List:map(fn, ...)
 	res = {}
 	for i = 1, #list do
 		res[#res + 1] = fn(list[i])
-	end	
+	end
 	return res
 end
 
 -- 对所有元素执行函数操作，在自身上改变
 function List:transform (fn, ...)
-    
+
 	return self
 end
 
 
 
 
--- 
+--
 function List:isEmpty ()
 	if type(self) ~= 'table' then
 		error('You use isEmpty(), but the parameter is not a list.', 2)
 	end
-	
+
     if #self == 0 then
 		return true
 	else
