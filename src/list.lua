@@ -248,9 +248,9 @@ end
 
 -- deleted by indexing interval
 function List:chop(i1,i2)
-	local i1, i2 = normalize_slice(i1, i2)
-    for i = i1, i2 do
-        tremove(t, i)
+	local i1, i2 = normalize_slice(self, i1, i2)
+	for _ = i1, i2 do
+		tremove(self, i1)
     end
 	return self
 end
