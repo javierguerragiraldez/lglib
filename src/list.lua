@@ -235,8 +235,10 @@ end
 
 -- delete all of list elements
 function List:clear()
-	for i=1, #self do tremove(self, i) end
-	return self  --if works, self should be nil
+	for k,_ in pairs(self) do
+		self[k] = nil
+	end
+	return self
 end
 
 -- length/size of list
