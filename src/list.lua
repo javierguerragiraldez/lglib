@@ -257,7 +257,12 @@ end
 
 -- insert another *list* at the location *idx*
 function List:splice(idx, list)
-    checkType(idx, list, 'number', 'table')
+	assert(types(idx,'number',list,'table'))
+	if idx == 0 then
+		idx = 1
+	elseif idx < 0 then
+		idx = #self + idx + 2
+	end
     local i = idx
     for _, v in ipairs(list) do
         tinsert(self, i, v)
