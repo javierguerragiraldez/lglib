@@ -148,6 +148,12 @@ _G['isFalse'] = function (onearg)
 	return false
 end
 
+-- check if is string or number
+_G['isStringOrNumber'] = function (arg)
+	local ctype = type(arg)
+	return ctype == 'string' or ctype == 'number'
+end
+
 -- config a prototype for a given object/instance
 _G['setProto'] = function (obj, proto)
 	assert (types(obj, 'table', proto, 'table'))
