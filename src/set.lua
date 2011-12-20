@@ -22,7 +22,7 @@ local function new (tbl)
 		checkType(tbl, 'table')
 		-- passed in params is a list
 		for _, v in ipairs(tbl) do
-			t[v] = true  
+			t[v] = true
 		end
 	elseif not table.isEmpty(tbl) then
 		t = tbl
@@ -37,7 +37,7 @@ setmetatable(Set, {
     __call = function (self, tbl)
         return new(tbl)
     end,
-	-- Set is a special Dict, whose values are true or nil. 
+	-- Set is a special Dict, whose values are true or nil.
 	-- Be careful that the value can not be false!!!
 	__index = Dict,
 })
@@ -87,7 +87,7 @@ Set.__pow = Set.symmetricDifference
 
 
 -- two cases of returned values, each one has two values
--- the first one indicates true and empty string, while the second is false and element that is the first element is not contained in set. 
+-- the first one indicates true and empty string, while the second is false and element that is the first element is not contained in set.
 function Set:isSub (set)
     for k in pairs(self) do
         if not set[k] then return false, k end
