@@ -1,7 +1,6 @@
 require('lglib')
 local string = string
 local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat,table.sort
-merge, difference = table.merge, table.difference 
 local List = require('lglib.list')
 local Dict = require('lglib.dict')
 
@@ -19,12 +18,14 @@ Set.__typename = "Set"
 local function new (tbl)
 	-- if tbl is nil, empty table returned
 	local t = {}
-	if tbl then
+	if #tbl > 0 then
 		checkType(tbl, 'table')
-		-- the input parameter "tbl" should be a LIST, BUT how to check it????? 
+		-- passed in params is a list
 		for _, v in ipairs(tbl) do
 			t[v] = true  
 		end
+	elseif not table.isEmpty(tbl) then
+		t = tbl
 	end
 
 	return setmetatable(t, Set)
@@ -62,25 +63,25 @@ Set.members = Dict.keys
 
 -- if set value can be false, it will be wrong somehow because of values overwritten..?????????
 function Set:union (set)
-    return Set(merge(self, set, true))  -- the type of data that merge() returned is not LIST...?????????
+    return Set(table.merge(self, set, true))  -- the type of data that merge() returned is not LIST...?????????
 end
 Set.__add = Set.union
 
 
 function Set:intersection (set)
-    return Set(merge(self,set,false))
+    return Set(table.merge(self,set,false))
 end
 Set.__mul = Set.intersection
 
 
 function Set:difference (set)
-    return Set(difference(self,set,false))
+    return Set(table.difference(self,set,false))
 end
 Set.__sub = Set.difference
 
 
 function Set:symmetricDifference (set)
-    return Set(difference(self,set,true))
+    return Set(table.difference(self,set,true))
 end
 Set.__pow = Set.symmetricDifference
 
