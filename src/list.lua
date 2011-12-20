@@ -29,9 +29,9 @@ end
 -- binding constructor new(tbl) with List() sytanx
 -- table can be accessed via __index from its/List metatable. It means List can reuse the table API??
 setmetatable(List, {
-    __call = function (self, tbl)
-        return new(tbl)
-    end,
+	__call = function (self, tbl)
+		return new(tbl)
+	end,
 	__index = table
 })
 
@@ -106,7 +106,7 @@ end
 
 -- @usage zip({10,20,30},{100,200,300}) is {{10,100},{20,200},{30,300}}
 function List.zip(...)
-    return List.mapn(function(...) return {...} end, ...)
+	return List.mapn(function(...) return {...} end, ...)
 end
 
 ------------------------------------------------------------------------
@@ -115,14 +115,14 @@ end
 -- appending extra element at the tail of list
 function List:append(val)
 	self[#self+1] = val
-    return self
+	return self
 end
 
 -- 前加元素
 -- super slow, time complexity is O(N). IF implemented by lua-table, it will be much better
 function List:prepend(val)
-    tinsert(self, 1, val)
-    return self
+	tinsert(self, 1, val)
+	return self
 end
 
 --list expansion by another one
@@ -138,8 +138,8 @@ end
 -- delete by index
 function List:iremove (i)
 	assert (types (i, 'number'))
-    tremove(self, i)
-    return self
+	tremove(self, i)
+	return self
 end
 
 -- delete by value, and all of them
@@ -160,23 +160,23 @@ List.push = List.append
 
 -- pop a element from list at right-hand side
 function List:pop()
-    return tremove(self)
+	return tremove(self)
 end
 
 -- starting from idx index and trying to find the first element with value=val,
 function List:find(val, idx)
-    checkType(self, 'table')
-    local idx = idx or 1
-    if idx < 0 then idx = #self + idx + 1 end
-    for i = idx, #self do
-        if self[i] == val then return i end
-    end
-    return nil
+	checkType(self, 'table')
+	local idx = idx or 1
+	if idx < 0 then idx = #self + idx + 1 end
+	for i = idx, #self do
+		if self[i] == val then return i end
+	end
+	return nil
 end
 
 -- contain element x or not
 function List:contains(x)
-    return self:find(x, 1) and true or false
+	return self:find(x, 1) and true or false
 end
 
 -- counting the times that element x appears in a list
@@ -201,14 +201,14 @@ end
 
 -- reverse the order of list elements
 function List:reverse()
-    local t = self
-    local n = #t
-    local n2 = n/2
-    for i = 1, n2 do
-        local k = n - i + 1
-        t[i], t[k] = t[k], t[i]
-    end
-    return self
+	local t = self
+	local n = #t
+	local n2 = n/2
+	for i = 1, n2 do
+		local k = n - i + 1
+		t[i], t[k] = t[k], t[i]
+	end
+	return self
 end
 
 -- slicing
@@ -251,7 +251,7 @@ function List:chop(i1,i2)
 	local i1, i2 = normalize_slice(self, i1, i2)
 	for _ = i1, i2 do
 		tremove(self, i1)
-    end
+	end
 	return self
 end
 
@@ -263,48 +263,73 @@ function List:splice(idx, list)
 	elseif idx < 0 then
 		idx = #self + idx + 2
 	end
-    local i = idx
-    for _, v in ipairs(list) do
-        tinsert(self, i, v)
-        i = i + 1
-    end
-    return self
+	local i = idx
+	for _, v in ipairs(list) do
+		tinsert(self, i, v)
+		i = i + 1
+	end
+	return self
 end
 
 -- assignment in the style of slicing
 function List:sliceAssign(i1, i2, seq)
-    checkType(i1, i2, 'number', 'number')
-    local i1, i2 = normalize_slice(self, i1, i2)
+	checkType(i1, i2, 'number', 'number')
+	local i1, i2 = normalize_slice(self, i1, i2)
 	local delta = i2 - i1 + 1
 
 	-- old implementation
 	if i2 >= i1 then self:chop(i1, i2) end
-    self:splice(i1, seq)
+	self:splice(i1, seq)
 
-    -- new implementation
-    for i = 1, delta do
-    	self[i1 + i - 1] = seq[i]
-    end
+	-- new implementation
+	for i = 1, delta do
+		self[i1 + i - 1] = seq[i]
+	end
 
-    return self
+	return self
+end
+
+function List:sliceAssign(i1, i2, seq)
+	i1, i2 = normalize_slice(self, i1, i2)
+	local seql = #seq
+-- 	local i3 = i1 + seql
+-- 	local d = i3 - i2
+-- 	if d > 0 then
+-- 		-- need more space
+-- 		for i = #self, i2, -1 do
+-- 			self[i+d] = self[i]
+-- 		end
+-- 	elseif d == 0 then
+-- 		-- exact fit
+-- 	else
+-- 		-- cut slack
+-- 	end
+	local g = seql - (i2-i1)	-- growth
+	for i = #self, i2, -1 do
+		self[i+g] = self[i]
+	end
+	for i = 1,seql do
+		self[i1+i-1] = seq[i]
+	end
+	return self
 end
 
 -- + can be used as linking/expanding sign, like lnew = l1 + l2
 function List:__add(another)
-    checkType(another, 'table')
+	checkType(another, 'table')
 
 	local ls = List(self)
-    ls:extend(another)
-    return ls
+	ls:extend(another)
+	return ls
 end
 
 -- equality operator in the context of  list, like l2 == l1?
 function List:__eq(L)
-    if #self ~= #L then return false end
-    for i = 1, #self do
-        if self[i] ~= L[i] then return false end
-    end
-    return true
+	if #self ~= #L then return false end
+	for i = 1, #self do
+		if self[i] ~= L[i] then return false end
+	end
+	return true
 end
 
 
@@ -340,7 +365,7 @@ function List:isEmpty ()
 		error('You use isEmpty(), but the parameter is not a list.', 2)
 	end
 
-    if #self == 0 then
+	if #self == 0 then
 		return true
 	else
 		return false
