@@ -36,6 +36,15 @@ setmetatable(List, {
 })
 
 
+local function interval_index (i, max)
+	if i > max then return max end
+	if i >= 1 then return i end
+	if i >= 0 then return 1 end
+	i = max -i
+	if i >=1 then return i end
+	return 1
+end
+
 -- the normalization of indice
 local function normalize_slice( self, start, stop )
 	local start = start or 1
@@ -272,38 +281,28 @@ function List:splice(idx, list)
 end
 
 -- assignment in the style of slicing
-function List:sliceAssign(i1, i2, seq)
-	checkType(i1, i2, 'number', 'number')
-	local i1, i2 = normalize_slice(self, i1, i2)
-	local delta = i2 - i1 + 1
-
-	-- old implementation
-	if i2 >= i1 then self:chop(i1, i2) end
-	self:splice(i1, seq)
-
-	-- new implementation
-	for i = 1, delta do
-		self[i1 + i - 1] = seq[i]
-	end
-
-	return self
-end
-
-function List:sliceAssign(i1, i2, seq)
-	i1, i2 = normalize_slice(self, i1, i2)
-	local seql = #seq
--- 	local i3 = i1 + seql
--- 	local d = i3 - i2
--- 	if d > 0 then
--- 		-- need more space
--- 		for i = #self, i2, -1 do
--- 			self[i+d] = self[i]
--- 		end
--- 	elseif d == 0 then
--- 		-- exact fit
--- 	else
--- 		-- cut slack
+-- function List:sliceAssign(i1, i2, seq)
+-- 	checkType(i1, i2, 'number', 'number')
+-- 	local i1, i2 = normalize_slice(self, i1, i2)
+-- 	local delta = i2 - i1 + 1
+--
+-- 	-- old implementation
+-- 	if i2 >= i1 then self:chop(i1, i2) end
+-- 	self:splice(i1, seq)
+--
+-- 	-- new implementation
+-- 	for i = 1, delta do
+-- 		self[i1 + i - 1] = seq[i]
 -- 	end
+--
+-- 	return self
+-- end
+
+function List:sliceAssign(i1, i2, seq)
+	local mx = #self+1
+	i1 = interval_index (i1, mx)
+	i2 = interval_index (i2, mx)
+	local seql = #seq
 	local g = seql - (i2-i1)	-- growth
 	for i = #self, i2, -1 do
 		self[i+g] = self[i]

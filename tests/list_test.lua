@@ -153,6 +153,7 @@ context ('list', function ()
 		assert_true (List{'a','b','c','d'}:slice(0,3):equal{'a','b','c'})
 		assert_true (List{'a','b','c','d'}:slice(2,-1):equal{'b','c','d'})
 		assert_true (List{'a','b','c','d'}:slice(-3,-2):equal{'b','c'})
+		-- missing: reverse
 	end))
 
 	test ('clear', strict.wrap(function ()
@@ -191,12 +192,14 @@ context ('list', function ()
 
 		assert_true (List{'x','y','z'}:sliceAssign (0,0,{'a','b'}):equal{'a','b','x','y','z'})
 		assert_true (List{'x','y','z'}:sliceAssign (1,1,{'a','b'}):equal{'a','b','x','y','z'})
-		assert_true (List{'x','y','z'}:sliceAssign (2,2,{'a','b'}):equal{'x','a','b','y','z'})
-		assert_true (List{'x','y','z'}:sliceAssign (3,3,{'a','b'}):equal{'x','y','a','b','z'})
-
 		assert_true (List{'x','y','z'}:sliceAssign (0,1,{'a','b'}):equal{'a','b','x','y','z'})
-		assert_true (List{'x','y','z'}:sliceAssign (1,2,{'a','b'}):equal{'a','b','y','z'})
 		assert_true (List{'x','y','z'}:sliceAssign (2,2,{'a','b'}):equal{'x','a','b','y','z'})
 		assert_true (List{'x','y','z'}:sliceAssign (3,3,{'a','b'}):equal{'x','y','a','b','z'})
+		assert_true (List{'x','y','z'}:sliceAssign (4,4,{'a','b'}):equal{'x','y','z','a','b'})
+
+		assert_true (List{'x','y','z'}:sliceAssign (0,2,{'a','b'}):equal{'a','b','y','z'})
+		assert_true (List{'x','y','z'}:sliceAssign (1,2,{'a','b'}):equal{'a','b','y','z'})
+		assert_true (List{'x','y','z'}:sliceAssign (2,3,{'a','b'}):equal{'x','a','b','z'})
+
 	end))
 end)
