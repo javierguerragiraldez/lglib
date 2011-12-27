@@ -286,16 +286,6 @@ function List:splice(idx, list)
 			self[i+idx-1] = v
 		end
 	end
--- 	if idx == 0 then
--- 		idx = 1
--- 	elseif idx < 0 then
--- 		idx = #self + idx + 2
--- 	end
--- 	local i = idx
--- 	for _, v in ipairs(list) do
--- 		tinsert(self, i, v)
--- 		i = i + 1
--- 	end
 	return self
 end
 
