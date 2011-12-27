@@ -200,6 +200,10 @@ context ('list', function ()
 		assert_true (List{'x','y','z'}:sliceAssign (0,2,{'a','b'}):equal{'a','b','y','z'})
 		assert_true (List{'x','y','z'}:sliceAssign (1,2,{'a','b'}):equal{'a','b','y','z'})
 		assert_true (List{'x','y','z'}:sliceAssign (2,3,{'a','b'}):equal{'x','a','b','z'})
+		assert_true (List{'x','y','z'}:sliceAssign (3,4,{'a','b'}):equal{'x','y','a','b'})
+
+		assert_true (List{'v','w','x','y','z'}:sliceAssign (0,4,{'a','b'}):equal{'a','b','y','z'})
+		assert_true (List{'v','w','x','y','z'}:sliceAssign (1,4,{'a','b'}):equal{'a','b','y','z'})
 
 	end))
 end)

@@ -304,8 +304,17 @@ function List:sliceAssign(i1, i2, seq)
 	i2 = interval_index (i2, mx)
 	local seql = #seq
 	local g = seql - (i2-i1)	-- growth
-	for i = #self, i2, -1 do
-		self[i+g] = self[i]
+	if g>0 then
+		for i = #self, i2, -1 do
+			self[i+g] = self[i]
+		end
+	else
+		for i = i2, #self do
+			self[i+g] = self[i]
+		end
+		for i = #self+g+1, #self do
+			self[i] = nil
+		end
 	end
 	for i = 1,seql do
 		self[i1+i-1] = seq[i]
