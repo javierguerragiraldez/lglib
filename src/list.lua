@@ -40,7 +40,7 @@ local function interval_index (i, max)
 	if i > max then return max end
 	if i >= 1 then return i end
 	if i >= 0 then return 1 end
-	i = max -i
+	i = max +i
 	if i >=1 then return i end
 	return 1
 end
@@ -257,9 +257,18 @@ end
 
 -- deleted by indexing interval
 function List:chop(i1,i2)
-	local i1, i2 = normalize_slice(self, i1, i2)
-	for _ = i1, i2 do
-		tremove(self, i1)
+	assert(types(i1,'number',i2,'number'))
+	local mx = #self+1
+	i1 = interval_index (i1, mx)
+	i2 = interval_index (i2, mx)
+	local shrink = i2+1 - i1
+	if shrink > 0 then
+		for i = i2+1, #self do
+			self[i-shrink] = self[i]
+		end
+		for i = mx-shrink, mx do
+			self[i] = nil
+		end
 	end
 	return self
 end
@@ -267,37 +276,30 @@ end
 -- insert another *list* at the location *idx*
 function List:splice(idx, list)
 	assert(types(idx,'number',list,'table'))
-	if idx == 0 then
-		idx = 1
-	elseif idx < 0 then
-		idx = #self + idx + 2
+	idx = interval_index (idx, #self+1)
+	local growth = #list
+	if growth > 0 then
+		for i = #self, idx, -1 do
+			self[i+growth] = self[i]
+		end
+		for i,v in ipairs(list) do
+			self[i+idx-1] = v
+		end
 	end
-	local i = idx
-	for _, v in ipairs(list) do
-		tinsert(self, i, v)
-		i = i + 1
-	end
+-- 	if idx == 0 then
+-- 		idx = 1
+-- 	elseif idx < 0 then
+-- 		idx = #self + idx + 2
+-- 	end
+-- 	local i = idx
+-- 	for _, v in ipairs(list) do
+-- 		tinsert(self, i, v)
+-- 		i = i + 1
+-- 	end
 	return self
 end
 
 -- assignment in the style of slicing
--- function List:sliceAssign(i1, i2, seq)
--- 	checkType(i1, i2, 'number', 'number')
--- 	local i1, i2 = normalize_slice(self, i1, i2)
--- 	local delta = i2 - i1 + 1
---
--- 	-- old implementation
--- 	if i2 >= i1 then self:chop(i1, i2) end
--- 	self:splice(i1, seq)
---
--- 	-- new implementation
--- 	for i = 1, delta do
--- 		self[i1 + i - 1] = seq[i]
--- 	end
---
--- 	return self
--- end
-
 function List:sliceAssign(i1, i2, seq)
 	local mx = #self+1
 	i1 = interval_index (i1, mx)
@@ -312,7 +314,7 @@ function List:sliceAssign(i1, i2, seq)
 		for i = i2, #self do
 			self[i+g] = self[i]
 		end
-		for i = #self+g+1, #self do
+		for i = #self+g+1, #self+1 do
 			self[i] = nil
 		end
 	end

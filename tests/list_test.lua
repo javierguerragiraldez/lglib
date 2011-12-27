@@ -182,7 +182,7 @@ context ('list', function ()
 		assert_true (List{'a','b','c'}:splice(4,{'x','y','z'}):equal{'a','b','c','x','y','z'})
 		assert_true (List{'a','b','c'}:splice(1,{'x','y','z'}):equal{'x','y','z','a','b','c'})
 		assert_true (List{'a','b','c'}:splice(0,{'x','y','z'}):equal{'x','y','z','a','b','c'})
-		assert_true (List{'a','b','c'}:splice(-1,{'x','y','z'}):equal{'a','b','c','x','y','z'})
+		assert_true (List{'a','b','c'}:splice(-1,{'x','y','z'}):equal{'a','b','x','y','z','c'})
 	end))
 
 	test ('sliceAssign', strict.wrap(function ()
@@ -204,6 +204,8 @@ context ('list', function ()
 
 		assert_true (List{'v','w','x','y','z'}:sliceAssign (0,4,{'a','b'}):equal{'a','b','y','z'})
 		assert_true (List{'v','w','x','y','z'}:sliceAssign (1,4,{'a','b'}):equal{'a','b','y','z'})
-
+		assert_true (List{'v','w','x','y','z'}:sliceAssign (2,5,{'a','b'}):equal{'v','a','b','z'})
+		assert_true (List{'v','w','x','y','z'}:sliceAssign (3,6,{'a','b'}):equal{'v','w','a','b'})
+		assert_true (List{'v','w','x','y','z'}:sliceAssign (4,7,{'a','b'}):equal{'v','w','x','a','b'})
 	end))
 end)
