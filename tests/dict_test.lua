@@ -45,4 +45,15 @@ context ('Dict', function ()
 		assert_true(Dict{x=123,y="4353",[54]=33,["long key"]=false}:keys():sort(cmp):equal{54,'long key','x','y'})
 	end))
 
+	test ('hasKey', strict.wrap(function ()
+		local d = Dict{x=123,y='abc',[65]='xyz'}
+		assert_true (d:hasKey('x'))
+		assert_true (d:hasKey('y'))
+		assert_true (d:hasKey(65))
+		assert_false(d:hasKey(1))
+		d[1]='w'
+		assert_false(d:hasKey(1))
+		assert_equal(d[1],'w')
+	end))
+
 end)
