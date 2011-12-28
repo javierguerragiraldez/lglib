@@ -174,7 +174,6 @@ end
 
 -- starting from idx index and trying to find the first element with value=val,
 function List:find(val, idx)
-	checkType(self, 'table')
 	local idx = idx or 1
 	if idx < 0 then idx = #self + idx + 1 end
 	for i = idx, #self do
@@ -316,7 +315,7 @@ end
 
 -- + can be used as linking/expanding sign, like lnew = l1 + l2
 function List:__add(another)
-	checkType(another, 'table')
+	assert(types(another, 'table'))
 
 	local ls = List(self)
 	ls:extend(another)
