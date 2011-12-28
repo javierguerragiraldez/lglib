@@ -23,6 +23,12 @@ require 'lglib'
 Dict = require 'lglib.dict'
 strict.off()
 
+local function cmp(a,b)
+	local ta,tb = type(a),type(b)
+	return ta==tb and a<b or ta<tb
+end
+
+
 context ('Dict', function ()
 
 	test ('new', strict.wrap(function ()
@@ -33,6 +39,10 @@ context ('Dict', function ()
 		assert_nil (a[1])
 		assert_nil (a[5])
 		assert_equal (table.insert, a.insert)
+	end))
+
+	test ('keys', strict.wrap(function ()
+		assert_true(Dict{x=123,y="4353",[54]=33,["long key"]=false}:keys():sort(cmp):equal{54,'long key','x','y'})
 	end))
 
 end)
