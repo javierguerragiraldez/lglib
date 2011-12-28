@@ -53,7 +53,15 @@ context ('Dict', function ()
 		assert_false(d:hasKey(1))
 		d[1]='w'
 		assert_false(d:hasKey(1))
-		assert_equal(d[1],'w')
+		assert_equal('w',d[1])
+	end))
+
+	test ('size', strict.wrap(function ()
+		local d = Dict{x=123,y='abc',[65]='xyz'}
+		assert_equal (3, d:size())
+		d[1]='w'
+		assert_equal (3, d:size())
+		assert_equal('w',d[1])
 	end))
 
 end)
