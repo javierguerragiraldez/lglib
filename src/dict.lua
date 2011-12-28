@@ -1,5 +1,4 @@
-local string, table = string, table
-local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat,table.sort
+local type, assert, setmetatable = type, assert, setmetatable
 local List = require('lglib.list')
 
 module(..., package.seeall)
@@ -31,7 +30,7 @@ local function new (tbl)
 	-- seems repeated coding w.r.t. table.lua
 	-- just directly call table.takeAparts(tbl)---->dict part
 	if tbl then
-		checkType(tbl, 'table')
+		assert(types(tbl, 'table'))
 		for k, v in pairs(tbl) do
 			if is_key(tbl, k) then
 				t[k] = v
