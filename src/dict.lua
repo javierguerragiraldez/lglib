@@ -73,12 +73,7 @@ function Dict:keys()
 end
 
 function Dict:hasKey(key)
-    for k, _ in pairs(self) do
-		if is_key(self, k) and k == key then
-            return true
-        end
-	end
-	return false
+	return self[key]~=nil and is_key(self,key)
 end
 
 function Dict:size()
