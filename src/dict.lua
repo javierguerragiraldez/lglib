@@ -26,14 +26,14 @@ end
 local function new (tbl)
 	-- if tbl is nil，then empty table returned
 	local t = {}
-	
+
 	-- only separate the dictionary part from the lua-table as input
 	-- seems repeated coding w.r.t. table.lua
 	-- just directly call table.takeAparts(tbl)---->dict part
 	if tbl then
 		checkType(tbl, 'table')
 		for k, v in pairs(tbl) do
-			if is_key(k) then
+			if is_key(tbl, k) then
 				t[k] = v
 			end
 		end
@@ -43,7 +43,7 @@ local function new (tbl)
 end
 
 -- binding constructor new(tbl) with Dict sytanx
--- table can be accessed via __index from its/Dict metatable 
+-- table can be accessed via __index from its/Dict metatable
 setmetatable(Dict, {
     __call = function (self, tbl)
         return new(tbl)
@@ -52,9 +52,9 @@ setmetatable(Dict, {
 })
 
 --[[
-suggestion: 
-you can make sure/guarantee that the dict feature of instances can be kept all the way. 
-delete the is_key() method, 
+suggestion:
+you can make sure/guarantee that the dict feature of instances can be kept all the way.
+delete the is_key() method,
 add insert()/delete() for checking the dict feature
 add extra length parameter when initialization
 or table tt["abc"] = "cde" and tt["cba"] = nil
