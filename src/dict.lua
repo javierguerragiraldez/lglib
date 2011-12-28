@@ -91,7 +91,7 @@ function Dict:values()
 	for key, v in pairs(self) do
 		-- select the keys with the dictionary type
 		if is_key(self, key) then
-			tinsert(res, v)
+			res:append(v)
 		end
 	end
 	return res

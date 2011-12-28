@@ -64,4 +64,8 @@ context ('Dict', function ()
 		assert_equal('w',d[1])
 	end))
 
+	test ('values', strict.wrap(function ()
+		assert_true(Dict{x=123,y="4353",[54]=33,["long key"]=false}:values():sort(cmp):equal{false,33,123,"4353"})
+	end))
+
 end)
