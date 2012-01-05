@@ -4,7 +4,7 @@ module(..., package.seeall)
 
 ------------------------------------------------------------------------
 -- simple HTML escape sequence
--- @param 
+-- @param
 -- @return
 ------------------------------------------------------------------------
 function escapeHTML(s)
@@ -15,7 +15,7 @@ end
 
 ------------------------------------------------------------------------
 -- Simplistic URL decoding that can handle + space encoding too.
--- @param 
+-- @param
 -- @return
 ------------------------------------------------------------------------
 function decodeURL(url)
@@ -26,20 +26,20 @@ function decodeURL(url)
 end
 
 ------------------------------------------------------------------------
--- simple URL encoding 
--- @param 
+-- simple URL encoding
+-- @param
 -- @return
 ------------------------------------------------------------------------
 function encodeURL(url)
 	checkType(url, 'string')
-    return url:gsub("\n","\r\n"):gsub("([^%w%-%.])", 
-        function (c) return ("%%%02X"):format(string.byte(c)) 
+    return url:gsub("\n","\r\n"):gsub("([^%w%-%.])",
+        function (c) return ("%%%02X"):format(string.byte(c))
     end)
 end
 
 ------------------------------------------------------------------------
 -- parse parameters of URL
--- @param 
+-- @param
 -- @return
 ------------------------------------------------------------------------
 function parseURL(url, sep)

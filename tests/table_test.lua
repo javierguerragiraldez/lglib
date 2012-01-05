@@ -12,7 +12,7 @@ t = T {
 	z = 'zcvcvc',
 	g = '4444444',
 	h = '34343aaa',
-	
+
 }
 ptable(getmetatable(t))
 

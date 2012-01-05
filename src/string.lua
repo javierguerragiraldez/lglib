@@ -7,7 +7,7 @@ local List = require 'lglib.list'
 local Set = require 'lglib.set'
 
 -- unpack() only acting on list-part of table ??
--- formatting one string or list of string  
+-- formatting one string or list of string
 -- therefore, we can do 1). extend the function of unpack  2). checkType(list) to make sure b is a LIST
 getmetatable("").__mul = function(a, b)
 	if not b then
@@ -26,9 +26,9 @@ getmetatable("").__mod = function (s, tab)
   return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))
 end
 
--- 
+--
 -- print( "%(key)s is %(val)7.2f%" / {key = "concentration", val = 56.2795} )
--- outputs "concentration is   56.28%" 
+-- outputs "concentration is   56.28%"
 getmetatable("").__div = function (s, tab)
   return (s:gsub('%%%((%a%w*)%)([-0-9%.]*[cdeEfgGiouxXsq])',
             function(k, fmt) return tab[k] and ("%"..fmt):format(tab[k]) or
@@ -48,7 +48,7 @@ function length(self)
 end
 
 ------------------------------------------------------------------------
--- capitalizing first letter of word  
+-- capitalizing first letter of word
 -- @param self one string word
 -- @usage 'example':cap()
 -- @return first letter of word to be capitalized
@@ -59,8 +59,8 @@ function cap(self)
 end
 
 ------------------------------------------------------------------------
--- check whether string "self" contains "substr" or not 
--- @param self  checked string 
+-- check whether string "self" contains "substr" or not
+-- @param self  checked string
 -- @param substr   sub-string
 -- @return true|false  true for containing, otherwise false
 ------------------------------------------------------------------------
@@ -73,9 +73,9 @@ end
 
 ------------------------------------------------------------------------
 -- check whether string starts with substring or not
--- @param self  checked string 
+-- @param self  checked string
 -- @param beg   substring
--- @return true|false   
+-- @return true|false
 ------------------------------------------------------------------------
 function startsWith(self, begin)
     if self:sub(1, #begin) ~= begin then
@@ -88,7 +88,7 @@ end
 -- check whether string ends with substring or not
 -- @param self  checked string
 -- @param tail   substring
--- @return true|false   
+-- @return true|false
 ------------------------------------------------------------------------
 function endsWith(self, tail)
 	if self:sub(-#tail) ~= tail then
@@ -102,7 +102,7 @@ end
 -- @param self 		splited sting
 -- @param delim		delimiter
 -- @param count	 	how many times that the delimiter could be replaced
--- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not 
+-- @param no_patterns   true|false|nil    whether turn off regular expression in delimiter or not
 -- @return rlist 	list of splited pieces
 ------------------------------------------------------------------------
 function split(self, delim, count, no_patterns)
@@ -130,10 +130,10 @@ function split(self, delim, count, no_patterns)
 end
 ------------------------------------------------------------------------
 -- spliting a given string by a delimiter
--- @param self  	splited string 
+-- @param self  	splited string
 -- @param delim 	delimiter
 -- @param count 	times that a delimiter could be replaced
--- @param no_patterns   true|false|nil 	turn off regular expression in delimiter or not 
+-- @param no_patterns   true|false|nil 	turn off regular expression in delimiter or not
 -- @return unpack a list of splited pieces
 ------------------------------------------------------------------------
 function splitOut(self, delim, count, no_patterns)
@@ -249,7 +249,7 @@ function mapreplace (self, mapping, n)
     for k, v in pairs(mapping) do
         self:gsub(k, v, n)
     end
-    
+
     return self
 end
 
@@ -397,7 +397,7 @@ end
 
 ------------------------------------------------------------------------
 -- random accessing a UTF8 char from given string
--- @param self   UTF8 string 
+-- @param self   UTF8 string
 -- @param i  indexing i-th UTF8 char, i should statisfy 0<i<=len
 -- @return  UTF8 char or nil if not found
 ------------------------------------------------------------------------
@@ -416,22 +416,22 @@ function utf8index(self, i)
             return self:sub(begPos, endPos-1)
         end
 	end
-    
+
     return nil
 end
 
 ------------------------------------------------------------------------
 -- slicing a UTF8 string
--- @param self  UTF8 string 
+-- @param self  UTF8 string
 -- @param i   	starting position at given UTF8 string, i should statisfy 0<i<=len
 -- @param j   	ending position at given UTF8 string, j should statisfy 0<j<=len and j>=i
--- @return   	UTF8 char or nil if not found 
+-- @return   	UTF8 char or nil if not found
 ------------------------------------------------------------------------
 function utf8slice(self, i, j)
 	if i > j then
         return nil
     end
-    
+
     local pos = 1
 	local bytes = self:len()
 	local len = 0
@@ -446,16 +446,16 @@ function utf8slice(self, i, j)
             break
         end
 	end
-    
+
     -- if len < i, now len is the length of this utf8 string
     if len < i then
         return nil
     end
-    
+
     if i == j then
         return self:sub(ibegPos, iendPos-1)
     end
-    
+
     while pos <= bytes do
         jbegPos = pos
    		pos = pos + utf8charbytes(self, pos)
@@ -465,9 +465,9 @@ function utf8slice(self, i, j)
             break
         end
 	end
-    
+
     return self:sub(ibegPos, jendPos-1)
-    
+
 end
 
 -- identical to string.reverse except that it supports UTF-8
@@ -498,7 +498,7 @@ end
 function findpart(str, start, endwhich)
 	if endwhich < start then return '' end
 	if endwhich <= 0 or start <= 0 then return '' end
-	
+
 	local str = str:trim()
 	local count = 0
 	local p = 0
@@ -514,11 +514,11 @@ function findpart(str, start, endwhich)
 			end
 		end
 	end
-	
+
 	if p == 0 then return '' end
-	
+
 	i = 0
-	count = 0		
+	count = 0
 	str = str:sub(p)
 	p = 0
 	while i do
@@ -531,9 +531,9 @@ function findpart(str, start, endwhich)
 			end
 		end
 	end
-	
-	if p == 0 then 
-		return str 
+
+	if p == 0 then
+		return str
 	else
 		return str:sub(1, p)
 	end
@@ -546,6 +546,6 @@ function trailingPath(path)
 	if path:sub(-1) ~= '/' then
 		path = ('%s/'):format(path)
 	end
-	
+
 	return path
 end

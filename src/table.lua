@@ -13,23 +13,23 @@ __typename = 'Table'
 -- dict-part---->hash table
 
 
--- two objects returned, List and Dict. 
+-- two objects returned, List and Dict.
 -- takeAparts function only handle one layer, how about a multi-layer case?
 function takeAparts(self)
 	local list_len = #self
 	local list_part, dict_part = {}, {}
-	
+
 	-- old implementation
 	for i=1, list_len do
 		table.insert(list_part, self[i])
 	end
-	
+
 	for k, v in pairs(self) do
 		if type(k) ~= 'number' or (type(k) == 'number' and k > list_len) then
 			dict_part[k] = v
 		end
 	end
-	
+
 	-- new implementation
 	--[[
 	for k, v in pairs(self) do
@@ -40,7 +40,7 @@ function takeAparts(self)
 	    end
 	end
 	--]]
-	
+
 	local List, Dict = require 'lglib.list', require 'lglib.dict'
 	return List(list_part), Dict(dict_part)
 end
@@ -54,8 +54,8 @@ function equal(self, another)
 
 	for k, v in pairs(another) do
 		if self[k] ~= v then return false end
-	end 
-    
+	end
+
     -- new implementation
     --[[
     if self.size ~= another.size then
@@ -103,7 +103,7 @@ end
    Author: Julio Manuel Fernandez-Diaz
    Date:   January 12, 2007
    (For Lua 5.1)
-   
+
    Modified slightly by RiciLake to avoid the unnecessary table traversal in tablecount()
 
    Formats tables with cycles recursively to any depth.
@@ -120,7 +120,7 @@ end
    proper indentations, apart from printing them:
 
       print(table.show(t, "t"))   -- a typical use
-   
+
    Heavily based on "Saving tables with cycles", PIL2, p. 113.
 
    Arguments:
@@ -149,7 +149,7 @@ function tree(t, name, indent)
          -- info.name is nil because o is not a calling level
          if info.what == "C" then
             return string.format("%q", so .. ", C function")
-         else 
+         else
             -- the information is defined through lines
             return string.format("%q", so .. ", defined in (" ..
                 info.linedefined .. "-" .. info.lastlinedefined ..
@@ -173,7 +173,7 @@ function tree(t, name, indent)
          cart = cart .. " = " .. basicSerialize(value) .. ";\n"
       else
          if saved[value] then
-            cart = cart .. " = {}; -- " .. saved[value] 
+            cart = cart .. " = {}; -- " .. saved[value]
                         .. " (self reference)\n"
             autoref = autoref ..  name .. " = " .. saved[value] .. ";\n"
          else
@@ -213,10 +213,10 @@ end
 -- @param self      the table to be updated
 -- @param source    source table
 -- @param keys      specific keys to be updated; if keys is nil, update will be reduced to the copy function.
--- @return self     the updated table 
+-- @return self     the updated table
 ------------------------------------------------------------------------
 function update(self, source, keys)
-    if keys then 
+    if keys then
         for _, key in ipairs(keys) do
             self[key] = source[key]
         end
@@ -229,7 +229,7 @@ function update(self, source, keys)
     return self
 end
 --[[
-	take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) 		between two tables. 
+	take care of the relative order of two tables, because there are overwritten issues for common keys/indice (usually number or string) 		between two tables.
 --]]
 
 -- dup=true for union operation, values of common keys from first table t1 will be repalced/covered by the later one t2.

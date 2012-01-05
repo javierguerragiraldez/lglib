@@ -52,7 +52,7 @@ mt.__newindex = function (t, n, v)
   end
   rawset(t, n, v)
 end
-  
+
 mt.__index = function (t, n)
   if not mt.__declared[n] and what() ~= "C" then
     --print(("[WARNING] variable '%s' in table '%s' is not declared."):format(n, tostring(t)))
